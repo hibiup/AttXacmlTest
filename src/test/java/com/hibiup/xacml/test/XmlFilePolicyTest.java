@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.net.URI;
 
 @RunWith(JUnit4.class)
-public class LocalPolicesTest {
-    private static final Log logger	= LogFactory.getLog(LocalPolicesTest.class);
+public class XmlFilePolicyTest {
+    private static final Log logger	= LogFactory.getLog(XmlFilePolicyTest.class);
 
-    public LocalPolicesTest() throws IOException {
+    public XmlFilePolicyTest() throws IOException {
     }
 
     private XACMLScopeResolver buildScopeResolver() {
@@ -57,7 +57,7 @@ public class LocalPolicesTest {
 
     @Test
     public synchronized void testLocalPdpEngine() throws FactoryException, DOMStructureException, PDPException {
-        String testPolicy = "IIA004";
+        String testPolicy = "IIA010";
 
         policyRepository.getPolicy(testPolicy).setXACMLProperties();
 
@@ -71,8 +71,13 @@ public class LocalPolicesTest {
         response.getResults().forEach(f -> {
             String decision = f.getDecision().name();
             logger.info(decision);
-            if(testPolicy == "IIA001") assert(decision=="PERMIT");
-            else if (testPolicy == "IIA002") assert(decision=="NOTAPPLICABLE");
+            switch(testPolicy) {
+                case "IIA001": assert(decision=="PERMIT");          // Matched
+                case "IIA002": assert(decision=="NOTAPPLICABLE");   // Not Matched
+                case "IIA004": assert(decision=="INDETERMINATE");   // Invalid syntax
+                case "IIA007": assert(decision=="INDETERMINATE");   // Must be resent
+                case "IIA010": assert(decision=="INDETERMINATE");   // Matches age(45:Integer)
+            }
         });
     }
 }
