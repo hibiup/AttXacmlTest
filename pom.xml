@@ -10,7 +10,7 @@
 
     <properties>
         <version.java>1.8</version.java>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.13.1</version.junit>
         <version.att.xacml>2.0.2-SNAPSHOT</version.att.xacml>
     </properties>
 
